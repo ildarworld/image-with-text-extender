@@ -1,0 +1,10 @@
+env/
+results/
+__pycache__
+.pytest_cache/
+build/
+dist/
+images.xlsx
+*.spec
+tests/data/results/
+.idea/
