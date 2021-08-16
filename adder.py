@@ -2,12 +2,19 @@ import os
 from openpyxl import load_workbook
 
 import consts
-from img import TextAdder
+from img import TextAdder, TextParams
 
-ARTICLE_FIELD_NAME = "Артикул"
+ARTICLE_FIELD_NAME = "Файл с расшеринием"
 TEXT_FIELD_NAME = "Текст"
-TEXT_SIZE_FIELD_NAME = "Размер текста"
-COLOR_FIELD_NAME = "Цвет"
+UPDOWN_FIELD_NAME = "Верх/Низ"
+HOR_ALIGN_FIELD_NAME = "Центровка текста по горизонтали"
+VERT_MARGIN_FIELD_NAME = "Сдвиг по вертикали в пикселях"
+FONT_NAME_FIELD_NAME = "Шрифт"
+BOLD_FIELD_NAME = "Жирность"
+ADD_BLOCK_FIELD_NAME = "Доп блоком или нет"
+BKGRD_FIELD_NAME = "Цвет фона"
+FONT_SIZE_FIELD_NAME = "Размер шрифта"
+COLOR_FIELD_NAME = "Цвет текста"
 
 COLORS_SCHEME = {
     "черный": "black",
@@ -16,10 +23,19 @@ COLORS_SCHEME = {
     "красный": "red",
 }
 
+ALIGN_SCHEME = {-1: "left", 0: "center", 1: "right"}
+
 XLSX_HEADERS = {
     ARTICLE_FIELD_NAME,
     TEXT_FIELD_NAME,
-    TEXT_SIZE_FIELD_NAME,
+    UPDOWN_FIELD_NAME,
+    HOR_ALIGN_FIELD_NAME,
+    VERT_MARGIN_FIELD_NAME,
+    FONT_NAME_FIELD_NAME,
+    BOLD_FIELD_NAME,
+    ADD_BLOCK_FIELD_NAME,
+    BKGRD_FIELD_NAME,
+    FONT_SIZE_FIELD_NAME,
     COLOR_FIELD_NAME,
 }
 
@@ -54,22 +70,31 @@ class Adder:
             self._work_sheet.iter_rows(min_row=2, max_col=30), start=1
         ):
             img_fn = os.path.join(
-                self._path_name,
-                str(row[self._file_headers[ARTICLE_FIELD_NAME]].value) + ".jpg",
+                self._path_name, row[self._file_headers[ARTICLE_FIELD_NAME]].value
             )
             result_path = os.path.join(self._path_name, "results")
-
             text = row[self._file_headers[TEXT_FIELD_NAME]].value
-            font_size = row[self._file_headers[TEXT_SIZE_FIELD_NAME]].value
-            color = COLORS_SCHEME[row[self._file_headers[COLOR_FIELD_NAME]].value]
+            params = TextParams(
+                font_name=row[self._file_headers[FONT_NAME_FIELD_NAME]].value,
+                font_size=row[self._file_headers[FONT_SIZE_FIELD_NAME]].value,
+                bkrg=COLORS_SCHEME[row[self._file_headers[BKGRD_FIELD_NAME]].value],
+                updown=row[self._file_headers[UPDOWN_FIELD_NAME]].value,
+                hor_align=ALIGN_SCHEME[
+                    row[self._file_headers[HOR_ALIGN_FIELD_NAME]].value
+                ],
+                vert_margin=row[self._file_headers[VERT_MARGIN_FIELD_NAME]].value,
+                bold=bool(row[self._file_headers[BOLD_FIELD_NAME]].value),
+                add_block=bool(row[self._file_headers[ADD_BLOCK_FIELD_NAME]].value),
+                color=COLORS_SCHEME[row[self._file_headers[COLOR_FIELD_NAME]].value],
+            )
+
             try:
                 self._items.append(
                     TextAdder(
                         file_name=img_fn,
                         result_path=result_path,
                         text=text,
-                        font_size=font_size,
-                        font_color=color,
+                        params=params,
                     )
                 )
             except FileNotFoundError:
@@ -77,7 +102,7 @@ class Adder:
 
     def process(self):
         for i, img in enumerate(self._items, start=1):
-            print(f" [{i}] Добавление текста к {self.img.file_name}")
+            print(f" [{i}] Добавление текста к {img.file_name}")
             img.add_text()
 
 
