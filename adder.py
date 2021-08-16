@@ -76,7 +76,8 @@ class Adder:
                 print(f"Не удалось обрабоать строку {i}. Файл {img_fn} не найден")
 
     def process(self):
-        for img in self._items:
+        for i, img in enumerate(self._items, start=1):
+            print(f" [{i}] Добавление текста к {self.img.file_name}")
             img.add_text()
 
 

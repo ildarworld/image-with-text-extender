@@ -34,7 +34,6 @@ class TextAdder:
         self.up = up or True
 
         self.font_name = font_name or self.get_default_font()
-        print("Font name", self.font_name)
         self.font = ImageFont.truetype(self.font_name, font_size)
         self.text = self._get_multiline_text(text, self.font)
 
