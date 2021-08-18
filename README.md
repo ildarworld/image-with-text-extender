@@ -29,7 +29,7 @@ The app were develop for run as stand-alone app in Mac based OS
 python3 -m venv env && source env/bin/activate && pip install -r requirements.txt
 ```
 
-2. Create stand-alone executable file
+2. Create a stand-alone executable file
 
 ```bash
 pyinstaller -F adder.py

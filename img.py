@@ -133,7 +133,8 @@ class TextAdder:
         if self.params.add_block:
             _, new_height = self._get_text_size(text)
             self.img = self._add_blank_line(
-                new_height * (text.count("\n") + 1), self.params.updown
+                new_height * (text.count("\n") + 1) + self.params.vert_margin,
+                self.params.updown,
             )
         return text
 

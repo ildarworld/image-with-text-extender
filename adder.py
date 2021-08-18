@@ -1,5 +1,6 @@
 import os
 from openpyxl import load_workbook
+from urllib.parse import urlparse
 
 import consts
 from img import TextAdder, TextParams
@@ -21,6 +22,14 @@ COLORS_SCHEME = {
     "белый": "white",
     "серый": "gray",
     "красный": "red",
+    "коричневый": "brown",
+    "бордовый": "darkred",
+    "оранжевый": "orange",
+    "желтый": "yellow",
+    "зеленый": "green",
+    "голубой": "skyblue",
+    "синий": "blue",
+    "фиолетовый": "purple",
 }
 
 ALIGN_SCHEME = {-1: "left", 0: "center", 1: "right"}
@@ -69,9 +78,12 @@ class Adder:
         for i, row in enumerate(
             self._work_sheet.iter_rows(min_row=2, max_col=30), start=1
         ):
-            img_fn = os.path.join(
-                self._path_name, row[self._file_headers[ARTICLE_FIELD_NAME]].value
+            img_file = str(
+                os.path.basename(
+                    urlparse(row[self._file_headers[ARTICLE_FIELD_NAME]].value).path
+                )
             )
+            img_fn = os.path.join(self._path_name, img_file)
             result_path = os.path.join(self._path_name, "results")
             text = row[self._file_headers[TEXT_FIELD_NAME]].value
             params = TextParams(

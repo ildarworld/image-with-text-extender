@@ -8,3 +8,4 @@ images.xlsx
 *.spec
 tests/data/results/
 .idea/
+~$*.xlsx
