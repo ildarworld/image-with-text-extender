@@ -9,6 +9,10 @@ from PIL import Image, ImageDraw, ImageFont
 
 MACOS_FONT_PATH = "/System/Library/Fonts/Supplemental/"
 MACOS_DEFAULT_FONT_NAME = "Arial.ttf"
+
+WINDOWS_FONT_PATH = "C:\\Windows\\Fonts"
+WINDOWS_DEFAULT_FONT_NAME = "Arial.ttf"
+
 RESULT_FOLDER_NAME = "results"
 FONT_DEFAULT_COLOR = (0, 0, 0)
 FONT_DEFAULT_SIZE = 40
@@ -66,21 +70,35 @@ class TextAdder:
         self.img = Image.open(file_name).convert("RGB")
         self.params = params
         self.result_path = result_path
-        font_name = (
-            self.params.font_name + " Bold" if params.bold else self.params.font_name
-        )
-        font_name = os.path.join(MACOS_FONT_PATH, font_name + ".ttf")
 
+        font_name = self.params.font_name or self.get_default_font()
+      
+        if platform == "darwin":
+            font_name = (
+                self.params.font_name + " Bold" if params.bold else self.params.font_name
+            )
+            font_name =  os.path.join(MACOS_FONT_PATH, font_name + ".ttf")
+        elif platform == "win32":
+            font_name = (
+                self.params.font_name + "bd" if params.bold else self.params.font_name
+            )
+            font_name = os.path.join(WINDOWS_FONT_PATH, font_name + ".ttf")
+        elif platform == "linux" or platform == "linux2":
+            raise OSError("Эта операционная система пока не поддерживается") 
+        
         self.font = ImageFont.truetype(
             font_name,
             self.params.font_size,
         )
         self.text = self._get_multiline_text(text, self.font)
 
+
     def get_default_font(self) -> str:
         if platform == "darwin":
             return os.path.join(MACOS_FONT_PATH, MACOS_DEFAULT_FONT_NAME)
-        elif platform == "win32" or platform == "linux" or platform == "linux2":
+        elif platform == "win32":
+            return os.path.join(WINDOWS_FONT_PATH, WINDOWS_DEFAULT_FONT_NAME)
+        elif platform == "linux" or platform == "linux2":
             raise OSError("Эта операционная система пока не поддерживается")
 
     def add_text(self):
