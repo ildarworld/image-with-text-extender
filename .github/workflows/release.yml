@@ -28,9 +28,10 @@ jobs:
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "release.tar.gz"
+          artifacts: "./dist/adder.exe"
           tag: "windows"
-          bodyFile: "dist/adder.exe"
+          allowUpdates: true
+          replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
   linux-release:
@@ -49,7 +50,8 @@ jobs:
       - name: Create Linux release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "release_linux.tar.gz"
+          artifacts: "./dist/adder.exe"
           tag: "linux"
-          bodyFile: "dist/adder"
+          allowUpdates: true
+          replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
