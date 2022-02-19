@@ -31,7 +31,7 @@ jobs:
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./module.zip"
+          artifacts: "./executable.zip"
           tag: "windows"
           allowUpdates: true
           replacesArtifacts: true
@@ -53,10 +53,13 @@ jobs:
       - name: Zip Files
         working-directory: ./dist
         run: zip -r ./executable.zip ./*
+      - name: ls
+        run: ls
+      - run: ls ./dist/
       - name: Create Linux release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./module.zip"
+          artifacts: "./executable.zip"
           tag: "linux"
           allowUpdates: true
           replacesArtifacts: true
