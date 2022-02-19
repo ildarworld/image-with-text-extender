@@ -31,7 +31,7 @@ jobs:
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./executable.zip"
+          artifacts: "./dist/executable.zip"
           tag: "windows"
           allowUpdates: true
           replacesArtifacts: true
@@ -52,7 +52,7 @@ jobs:
         run: pyinstaller -F adder.py
       - name: Zip Files
         working-directory: ./dist
-        run: zip -r ./executable.zip ./*
+        run: zip -r ./dist/executable.zip ./*
       - name: ls
         run: ls
       - run: ls ./dist/
