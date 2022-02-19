@@ -1,0 +1,45 @@
+name: Create releases
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "tests/**"
+jobs:
+  windows-release:
+    runs-on: windows-latest
+      steps:
+        - name: Checkout code
+          - uses: actions/checkout@v2
+        - name: Configure python
+        - uses: actions/setup-python@v2
+
+        - name: Install dependencies
+        - run: pip install requirements.txt
+        - name: Build for windows
+        - run: pyinstaller.exe -F adder.py
+        - name: Create Winwdows release
+          uses: ncipollo/release-action@v1
+          with:
+            artifacts: "release.tar.gz,foo/*.txt"
+            bodyFile: "dist/adder.exe"
+            token: ${{ secrets.GITHUB_TOKEN }}
+
+  linux-release:
+    runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          - uses: actions/checkout@v2
+        - name: Configure python
+        - uses: actions/setup-python@v2
+
+        - name: Install dependencies
+        - run: pip install requirements.txt
+        - name: Build for windows
+        - run: pyinstaller -F adder.py
+        - name: Create Linux release
+          uses: ncipollo/release-action@v1
+          with:
+            artifacts: "release.tar.gz,foo/*.txt"
+            bodyFile: "dist/adder"
+            token: ${{ secrets.GITHUB_TOKEN }}

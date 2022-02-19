@@ -9,3 +9,4 @@ images.xlsx
 tests/data/results/
 .idea/
 ~$*.xlsx
+.venv/
