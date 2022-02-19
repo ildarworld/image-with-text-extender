@@ -52,14 +52,14 @@ jobs:
         run: pyinstaller -F adder.py
       - name: Zip Files
         working-directory: ./dist
-        run: zip -r ./dist/executable.zip ./*
+        run: zip -r ./executable.zip ./*
       - name: ls
         run: ls
       - run: ls ./dist/
       - name: Create Linux release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./executable.zip"
+          artifacts: "./dist/executable.zip"
           tag: "linux"
           allowUpdates: true
           replacesArtifacts: true
