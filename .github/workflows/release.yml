@@ -25,10 +25,13 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build for windows
         run: pyinstaller -F adder.py
+      - name: Zip Files
+        working-directory: ./dist
+        run: zip -r ./executable.zip ./*
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./dist/adder.exe"
+          artifacts: "./module.zip"
           tag: "windows"
           allowUpdates: true
           replacesArtifacts: true
@@ -47,10 +50,13 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build for Linux
         run: pyinstaller -F adder.py
+      - name: Zip Files
+        working-directory: ./dist
+        run: zip -r ./executable.zip ./*
       - name: Create Linux release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./dist/adder.exe"
+          artifacts: "./module.zip"
           tag: "linux"
           allowUpdates: true
           replacesArtifacts: true
