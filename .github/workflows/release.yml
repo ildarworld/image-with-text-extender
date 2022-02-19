@@ -25,9 +25,12 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build for windows
         run: pyinstaller -F adder.py
+      - name: dir
+        run: dir
+      - name: dir2
+        run: dir dist
       - name: Zip Files
-        working-directory: ./dist
-        run: powershell Compress-Archive -Path dist -DestinationPath executable
+        run: powershell Compress-Archive -Path dist/adder.exe -DestinationPath executable
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
@@ -37,30 +40,30 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  linux-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2.4.0
-      - name: Configure python
-        uses: actions/setup-python@v2.3.2
-        with:
-           python-version: 3.10.2
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Build for Linux
-        run: pyinstaller -F adder.py
-      - name: Zip Files
-        working-directory: ./dist
-        run: zip -r ./executable.zip ./*
-      - name: ls
-        run: ls
-      - run: ls ./dist/
-      - name: Create Linux release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "./dist/executable.zip"
-          tag: "linux"
-          allowUpdates: true
-          replacesArtifacts: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+#   linux-release:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2.4.0
+#       - name: Configure python
+#         uses: actions/setup-python@v2.3.2
+#         with:
+#            python-version: 3.10.2
+#       - name: Install dependencies
+#         run: pip install -r requirements.txt
+#       - name: Build for Linux
+#         run: pyinstaller -F adder.py
+#       - name: Zip Files
+#         working-directory: ./dist
+#         run: zip -r ./executable.zip ./*
+#       - name: ls
+#         run: ls
+#       - run: ls ./dist/
+#       - name: Create Linux release
+#         uses: ncipollo/release-action@v1
+#         with:
+#           artifacts: "./dist/executable.zip"
+#           tag: "linux"
+#           allowUpdates: true
+#           replacesArtifacts: true
+#           token: ${{ secrets.GITHUB_TOKEN }}
