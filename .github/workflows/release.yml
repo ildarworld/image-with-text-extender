@@ -13,7 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Configure python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.3.2
+        with:
+           python-version: 3.10.2
       - name: Install dependencies
         run: pip install requirements.txt
       - name: Build for windows
@@ -21,7 +23,7 @@ jobs:
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "release.tar.gz,foo/*.txt"
+          artifacts: "release.tar.gz"
           bodyFile: "dist/adder.exe"
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -31,7 +33,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Configure python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.3.2
+        with:
+           python-version: 3.10.2
       - name: Install dependencies
         run: pip install requirements.txt
       - name: Build for windows
@@ -39,6 +43,6 @@ jobs:
       - name: Create Linux release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "release.tar.gz,foo/*.txt"
+          artifacts: "release_linux.tar.gz"
           bodyFile: "dist/adder"
           token: ${{ secrets.GITHUB_TOKEN }}
