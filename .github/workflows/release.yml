@@ -27,11 +27,11 @@ jobs:
         run: pyinstaller -F adder.py
       - name: Zip Files
         working-directory: ./dist
-        run: zip -r ./executable.zip ./*
+        run: powershell Compress-Archive -Path dist -DestinationPath executable
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./dist/executable.zip"
+          artifacts: "executable.zip"
           tag: "windows"
           allowUpdates: true
           replacesArtifacts: true
