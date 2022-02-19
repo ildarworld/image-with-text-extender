@@ -5,13 +5,18 @@ on:
       - main
     paths-ignore:
       - "tests/**"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "tests/**"
 jobs:
 
   windows-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.0
       - name: Configure python
         uses: actions/setup-python@v2.3.2
         with:
@@ -19,11 +24,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Build for windows
-        run: pyinstaller.exe -F adder.py
+        run: pyinstaller -F adder.py
       - name: Create Winwdows release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "release.tar.gz"
+          tag: "windows"
           bodyFile: "dist/adder.exe"
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -31,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.0
       - name: Configure python
         uses: actions/setup-python@v2.3.2
         with:
@@ -44,5 +50,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "release_linux.tar.gz"
+          tag: "linux"
           bodyFile: "dist/adder"
           token: ${{ secrets.GITHUB_TOKEN }}
