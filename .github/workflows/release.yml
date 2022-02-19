@@ -5,41 +5,93 @@ on:
       - main
     paths-ignore:
       - "tests/**"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "tests/**"
 jobs:
-  windows-release:
+
+  windows:
     runs-on: windows-latest
-      steps:
-        - name: Checkout code
-          - uses: actions/checkout@v2
-        - name: Configure python
-        - uses: actions/setup-python@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.4.0
+      - name: Configure python
+        uses: actions/setup-python@v2.3.2
+        with:
+           python-version: 3.10.2
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build for windows
+        run: pyinstaller -F adder.py
+      - name: dir
+        run: dir
+      - name: dir2
+        run: dir dist
+      - name: Zip Files
+        run: powershell Compress-Archive -Path dist/adder.exe -DestinationPath executable
+      - name: Create Winwdows release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "executable.zip"
+          tag: "windows"
+          allowUpdates: true
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Install dependencies
-        - run: pip install requirements.txt
-        - name: Build for windows
-        - run: pyinstaller.exe -F adder.py
-        - name: Create Winwdows release
-          uses: ncipollo/release-action@v1
-          with:
-            artifacts: "release.tar.gz,foo/*.txt"
-            bodyFile: "dist/adder.exe"
-            token: ${{ secrets.GITHUB_TOKEN }}
-
-  linux-release:
+  linux:
     runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          - uses: actions/checkout@v2
-        - name: Configure python
-        - uses: actions/setup-python@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.4.0
+      - name: Configure python
+        uses: actions/setup-python@v2.3.2
+        with:
+           python-version: 3.10.2
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build for Linux
+        run: pyinstaller -F adder.py
+      - name: Zip Files
+        working-directory: ./dist
+        run: zip -r ./executable.zip ./*
+      - name: ls
+        run: ls
+      - run: ls ./dist/
+      - name: Create Linux release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./dist/executable.zip"
+          tag: "linux"
+          allowUpdates: true
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Install dependencies
-        - run: pip install requirements.txt
-        - name: Build for windows
-        - run: pyinstaller -F adder.py
-        - name: Create Linux release
-          uses: ncipollo/release-action@v1
-          with:
-            artifacts: "release.tar.gz,foo/*.txt"
-            bodyFile: "dist/adder"
-            token: ${{ secrets.GITHUB_TOKEN }}
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.4.0
+      - name: Configure python
+        uses: actions/setup-python@v2.3.2
+        with:
+           python-version: 3.10.2
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build for Linux
+        run: pyinstaller -F adder.py
+      - name: Zip Files
+        working-directory: ./dist
+        run: zip -r ./executable.zip ./*
+      - name: ls
+        run: ls
+      - run: ls ./dist/
+      - name: Create MacOS release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./dist/executable.zip"
+          tag: "macos"
+          allowUpdates: true
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
