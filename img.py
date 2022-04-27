@@ -4,7 +4,6 @@ import collections
 from pathlib import Path, PurePath
 from string import ascii_letters
 import textwrap
-
 from PIL import Image, ImageDraw, ImageFont
 
 MACOS_FONT_PATH = "/System/Library/Fonts/Supplemental/"
@@ -71,27 +70,22 @@ class TextAdder:
         self.params = params
         self.result_path = result_path
 
-        font_name = self.params.font_name or self.get_default_font()
-      
+        font_name = self.params.font_name.strip() or self.get_default_font()
+
         if platform == "darwin":
-            font_name = (
-                self.params.font_name + " Bold" if params.bold else self.params.font_name
-            )
-            font_name =  os.path.join(MACOS_FONT_PATH, font_name + ".ttf")
+            font_name = self.params.font_name + " Bold" if params.bold else self.params.font_name
+            font_name = os.path.join(MACOS_FONT_PATH, font_name + ".ttf")
         elif platform == "win32":
-            font_name = (
-                self.params.font_name + "bd" if params.bold else self.params.font_name
-            )
+            font_name = self.params.font_name + "bd" if params.bold else self.params.font_name
             font_name = os.path.join(WINDOWS_FONT_PATH, font_name + ".ttf")
         elif platform == "linux" or platform == "linux2":
-            raise OSError("Эта операционная система пока не поддерживается") 
-        
+            raise OSError("Эта операционная система пока не поддерживается")
+
         self.font = ImageFont.truetype(
             font_name,
             self.params.font_size,
         )
         self.text = self._get_multiline_text(text, self.font)
-
 
     def get_default_font(self) -> str:
         if platform == "darwin":
@@ -116,9 +110,7 @@ class TextAdder:
         x = (self.img.size[0] - max_line_size - X_MARGIN) / 2
         y = self.params.vert_margin
         if not self.params.updown:
-            text_height = sum(
-                [self._get_text_size(x)[1] for x in self.text.split("\n")]
-            )
+            text_height = sum([self._get_text_size(x)[1] for x in self.text.split("\n")])
             y = self.img.size[1] - self.params.vert_margin - text_height
 
         image_editable.multiline_text(
@@ -132,9 +124,7 @@ class TextAdder:
     def _add_blank_line(self, height, up: bool = True):
 
         width, old_height = self.img.size
-        new_image = Image.new(
-            self.img.mode, (width, old_height + height), self.params.bkrg
-        )
+        new_image = Image.new(self.img.mode, (width, old_height + height), self.params.bkrg)
         if up:
             new_image.paste(self.img, (0, height))
         else:
