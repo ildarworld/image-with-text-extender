@@ -34,7 +34,9 @@ jobs:
           path: release_url.txt
 
   build:
+    name: Build applications
     needs: [release]
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
