@@ -35,17 +35,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-latest
-            TARGET: macos
-            CMD_BUILD: >
-              pyinstaller -F adder.py &&
-              cd dist/ &&
-              zip -r ./macos.zip ./*
-            OUT_FILE_NAME: macos.zip
-            ASSET_MIME: application/zip
+          # - os: macos-latest
+          #   TARGET: macos
+          #   CMD_BUILD: >
+          #     pyinstaller -F adder.py &&
+          #     cd dist/ &&
+          #     zip -r ./macos.zip ./*
+          #   OUT_FILE_NAME: macos.zip
+          #   ASSET_MIME: application/zip
           - os: windows-latest
             TARGET: windows
-            CMD_BUILD: pyinstaller -F adder.py && powershell Compress-Archive -Path dist/adder.exe -DestinationPath ./dist/windows
+            CMD_BUILD: pyinstaller -F adder.py && powershell Compress-Archive -Path dist/adder.exe -DestinationPath ./dist/windows.zip
             OUT_FILE_NAME: windows.zip
             ASSET_MIME: application/zip
 
