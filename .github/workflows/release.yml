@@ -46,14 +46,14 @@ jobs:
             CMD_BUILD: >
               pyinstaller -F adder.py &&
               cd dist/ &&
-              zip -r9 adder/
-            OUT_FILE_NAME: adder.zip
+              zip -r ./macos.zip ./*
+            OUT_FILE_NAME: macos.zip
             ASSET_MIME: application/zip
           - os: windows-latest
             TARGET: windows
-            CMD_BUILD: pyinstaller -F adder.py
-            OUT_FILE_NAME: adder.exe
-            ASSET_MIME: application/vnd.microsoft.portable-executable
+            CMD_BUILD: pyinstaller -F adder.py && powershell Compress-Archive -Path adder.exe -DestinationPath windows
+            OUT_FILE_NAME: windows.zip
+            ASSET_MIME: application/zip
 
     steps:
       - uses: actions/checkout@v2
