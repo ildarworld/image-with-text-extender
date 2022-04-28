@@ -125,6 +125,7 @@ class Adder:
     def process(self):
         with ThreadPoolExecutor(max_workers=8) as executor:
             executor.map(self._change_image, self._items)
+        input("Нажмите что-нибудь чтобы завершить")
 
 
 if __name__ == "__main__":
