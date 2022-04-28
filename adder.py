@@ -125,7 +125,6 @@ class Adder:
     def process(self):
         with ThreadPoolExecutor(max_workers=8) as executor:
             executor.map(self._change_image, self._items)
-        input("Нажмите что-нибудь чтобы завершить")
 
 
 if __name__ == "__main__":
@@ -143,6 +142,14 @@ if __name__ == "__main__":
         # we are running in a normal Python environment
         bundle_dir = os.path.dirname(os.path.abspath(__file__))
 
-    adder = Adder(file_name=filename)
-    adder.open_file()
-    adder.process()
+    try:
+        adder = Adder(file_name=filename)
+        adder.open_file()
+        adder.process()
+    except FileNotFoundError as e:
+        print(f"Ошибка, файл не обнаружен: {e}")
+    except Exception as e:
+        print(type(e))
+        print(f"Ошибка: {e}")
+    finally:
+        input("Нажмите что-нибудь чтобы завершить")
