@@ -52,9 +52,9 @@ XLSX_HEADERS = {
 
 class Adder:
     def __init__(self, file_name: str = None):
-        self.file_name = file_name
-        self._items = []
-        self._path_name = os.path.split(file_name)[0]
+        self.file_name: str = file_name
+        self._items: list = []
+        self._path_name: str = os.path.split(file_name)[0]
         self._work_sheet = None
         self._file_headers: dict = dict()
         self._item_number: int = 1
